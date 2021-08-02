@@ -280,7 +280,7 @@ export default {
             Obj.isEdit = false;
             Obj.name = "名称";
             Obj.id = "";
-            Obj.damage = "1";
+            Obj.damage = "0";
             Obj.price = "0";
             Obj.image = "";
             all.splice(index, 0, Obj);
@@ -303,7 +303,7 @@ export default {
             Obj.isEdit = false;
             Obj.name = "名称";
             Obj.id = "";
-            Obj.damage = "1";
+            Obj.damage = "0";
             Obj.price = "0";
             Obj.image = "";
             obj.content.splice(index, 0, Obj);

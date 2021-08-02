@@ -35,7 +35,7 @@
   <draggable
     v-bind="dragOptions"
     tag="div"
-    class="item-container"
+    class="item-container "
     :list="list"
     :group="desc ? 'desc' : ''"
     :value="value"

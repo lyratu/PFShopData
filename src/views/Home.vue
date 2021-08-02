@@ -1,27 +1,45 @@
 <template>
   <div class="home">
     <el-row>
-      <el-col :span="12" :offset="6">
+      <el-col :xs="0" :sm="2" :md="4" class="full"></el-col>
+      <el-col :xs="24" :sm="20" :md="16">
         <el-row :gutter="10">
           <el-col :span="24">
-            <el-button type="primary" size="small" @click="add"
-              >新建节点</el-button
-            >
-            <el-button type="primary" size="small" @click="importJson"
-              >导入文件</el-button
-            >
+            <el-button-group>
+              <el-button type="primary" size="small" @click="add"
+                >{{$t('l.new')}}</el-button
+              >
+              <el-button type="primary" size="small" @click="importJson"
+                >{{$t('l.import')}}</el-button
+              >
 
-            <el-button type="primary" size="small" @click="edit = true"
-              >编辑JSON</el-button
-            >
+              <el-button type="primary" size="small" @click="edit = true"
+                >{{$t('l.edit')}}</el-button
+              >
 
-            <el-button type="primary" size="small" @click="exportJson"
-              >导出文件</el-button
-            >
-            <el-button type="primary" size="small" @click="dialogVisible = true"
-              >使用帮助</el-button
-            >
-            <el-dialog title="帮助" :visible.sync="dialogVisible" width="50%">
+              <el-button type="primary" size="small" @click="exportJson"
+                >{{$t('l.export')}}</el-button
+              >
+
+              <el-button type="primary" size="small" @click="clearJson"
+                >{{$t('l.clear')}}</el-button
+              >
+              <el-button
+                type="primary"
+                size="small"
+                @click="dialogVisible = true"
+                >{{$t('l.help')}}</el-button
+              >
+              
+            </el-button-group>
+            <el-dropdown size="small" split-button type="primary" class="floatRight" @command="handleCommand">
+                {{lang}}
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item command="中文">中文</el-dropdown-item>
+                  <el-dropdown-item command="English">English</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            <el-dialog :title="$t('l.help')" :visible.sync="dialogVisible" width="80%">
               <h3>1.新建节点</h3>
               <p>
                 点击该按钮在<strong>当前分类</strong>下新建一个<strong>菜单节点</strong>，菜单节点下方有四个选择按钮，分别是：
@@ -68,69 +86,74 @@
                 >复制图片路径即可。 <br /><strong
                   >也可以使用网络图片,在输入框输入完整图片地址</strong
                 >
+                <strong>图片格式案例: textures/blocks/dirt [blocks代表方块、items代表物品]</strong>
               </p>
               <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisible = false">取 消</el-button>
+                <el-button @click="dialogVisible = false">{{$t('l.no')}}</el-button>
                 <el-button type="primary" @click="dialogVisible = false"
-                  >确 定</el-button
+                  >{{$t('l.ok')}}</el-button
                 >
               </span>
             </el-dialog>
             <el-dialog
-              title="编辑JSON"
+              :title="$t('l.edit')"
               :visible.sync="edit"
-              width="50%"
+              width="80%"
               @opened="openEdit"
             >
               <pre class="pre" ref="preR" contenteditable="true"></pre>
               <span slot="footer" class="dialog-footer">
-                <el-button @click="cancelEdit">取 消</el-button>
-                <el-button type="primary" @click="confirmEdit">确 定</el-button>
+                <el-button @click="cancelEdit">{{$t('l.no')}}</el-button>
+                <el-button type="primary" @click="confirmEdit">{{$t('l.ok')}}</el-button>
               </span>
             </el-dialog>
           </el-col>
-          <el-col :span="12">
+          <el-col :span="24">
             <el-upload
               drag
               :limit="1"
-              action="https://jsonplaceholder.typicode.com/posts"
+              action="http://wblog.icu:3000/posts"
               ref="upload"
               accept=".json"
               :file-list="fileList"
               :on-success="onSuccess"
               :on-remove="onRemove"
+              :on-error="onError"
             >
               <i class="el-icon-upload"></i>
               <div class="el-upload__text">
-                将文件拖到此处，或<em>点击上传</em>
+                {{$t('l.upL1')}}<em>{{$t('l.upL2')}}</em>
               </div>
               <div class="el-upload__tip" slot="tip">
-                上传json文件，且只能上传 1 个文件
+                {{$t('l.tip1')}}
+                <br />
+                {{$t('l.tip2')}}
               </div>
             </el-upload>
           </el-col>
         </el-row>
         <div class="grid-content bg-purple">
           <el-tabs v-model="activeName">
-            <el-tab-pane label="回收商店" name="recycle">
-              <el-row :gutter="20">
+            <el-tab-pane :label="$t('l.re')" name="recycle">
+              <el-row :gutter="20" class="flow-y">
                 <el-col :span="12"><cycle v-model="shop.recycle" /></el-col>
-                <el-col :span="12">
+                <el-col :span="12" class="hidden-sm-and-down">
                   <pre class="pre">{{ shop.recycle }}</pre>
                 </el-col>
               </el-row>
             </el-tab-pane>
-            <el-tab-pane label="出售商店" name="sell">
-              <el-row :gutter="20">
+            <el-tab-pane :label="$t('l.se')" name="sell">
+              <el-row :gutter="20" class="flow-y">
                 <el-col :span="12"><sell v-model="shop.sell" /></el-col>
-                <el-col :span="12">
+                <el-col :span="12" class="hidden-sm-and-down">
                   <pre class="pre">{{ shop.sell }}</pre>
                 </el-col>
               </el-row>
             </el-tab-pane>
           </el-tabs>
-        </div></el-col
-      >
+        </div>
+      </el-col>
+      <el-col :xs="0" :sm="2" :md="4" class="full"></el-col>
     </el-row>
   </div>
 </template>
@@ -156,6 +179,7 @@ export default {
       shop: { recycle: [], sell: [] },
       dialogVisible: false,
       edit: false,
+      lang:"中文"
     };
   },
   watch: {
@@ -171,8 +195,8 @@ export default {
   created() {
     let data = sessionStorage.getItem("data");
     let wpid = sessionStorage.getItem("wpid");
-    if(wpid!=null){
-      this.wpid = wpid
+    if (wpid != null) {
+      this.wpid = wpid;
     }
     if (data != null) {
       this.shop = JSON.parse(data);
@@ -182,6 +206,23 @@ export default {
     }
   },
   methods: {
+    handleCommand(command) {
+        this.lang = command
+        if ( this.lang === '中文' ) {
+          this.$i18n.locale = 'zh-CN';
+          this.$message({
+            type: "success",
+            message: "切换语言为中文",
+          });
+       }else {
+          this.$i18n.locale = 'en-US';
+          this.$message({
+            type: "success",
+            message: "Switch language to English",
+          });
+       }
+       
+      },
     addAttributes(object, pid) {
       for (let obj of object) {
         pid++;
@@ -219,6 +260,26 @@ export default {
       const blob = new Blob([data], { type: "application/json" });
       FileSaver.saveAs(blob, `shopdata.json`);
     },
+    clearJson() {
+      this.$confirm(this.$t('l.clearTip'),this.$t('l.tips'), {
+        confirmButtonText: this.$t('l.ok'),
+        cancelButtonText: this.$t('l.no'),
+        type: "warning",
+      })
+        .then(() => {
+          this.shop = { recycle: [], sell: [] };
+          this.$message({
+            type: "success",
+            message: this.$t('l.clearOk'),
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: this.$t('l.clearNo'),
+          });
+        });
+    },
     add() {
       this.wpid++;
       let typeObj = {};
@@ -243,22 +304,28 @@ export default {
         this.uploadData = JSON.parse(e.target.result);
       };
     },
+    onError(res, file) {
+      console.log(file);
+    },
     onRemove(file) {
+      this.uploadData = [];
       this.fileList = [];
     },
     importJson() {
       this.$emit("uploadParent", this.uploadData);
-      if (this.uploadData.recycle != null) {
+      if (!(this.uploadData == false)) {
         this.shop = this.uploadData;
         this.addAttributes(this.shop.recycle, 0);
         this.addAttributes(this.shop.sell, 0);
         this.$message({
           type: "success",
-          message: `导入文件成功!`,
+          message: this.$t('l.impOk'),
         });
+        this.fileList = [];
+        this.uploadData = [];
       } else {
-        this.$alert("等待文件上传完成,如果上传不成功请多次尝试", "提示", {
-          confirmButtonText: "确定",
+        this.$alert(this.$t('l.impTips'), this.$t('l.tips'), {
+          confirmButtonText: this.$t('l.ok'),
         });
       }
     },
@@ -273,7 +340,7 @@ export default {
         ) {
           this.$message({
             type: "error",
-            message: `输入的JSON缺少recycle或sell属性!`,
+            message: this.$t('l.editErr1'),
           });
           return null;
         }
@@ -282,19 +349,19 @@ export default {
         } catch (e) {
           this.$message({
             type: "error",
-            message: `输入的JSON格式有误!`,
+            message: this.$t('l.editErr'),
           });
           return null;
         }
         this.$message({
           type: "success",
-          message: `修改JSON成功!`,
+          message: this.$t('l.editOk'),
         });
         this.edit = false;
       } else {
         this.$message({
           type: "error",
-          message: `输入不能为空!`,
+          message: this.$t('editEm'),
         });
       }
     },
@@ -303,7 +370,7 @@ export default {
       this.edit = false;
     },
     handleClose(done) {
-      this.$confirm("确认关闭？")
+      this.$confirm(this.$t('l.close'))
         .then((_) => {
           done();
         })
@@ -313,6 +380,12 @@ export default {
 };
 </script>
 <style scoped>
+.flow-y {
+  overflow-y: auto;
+}
+.full {
+  min-height: 36px;
+}
 * {
   list-style: none;
 }
@@ -330,5 +403,8 @@ export default {
     "Courier New", monospace;
   font-size: 0.5em;
   overflow-y: auto;
+}
+.floatRight{
+  float: right;
 }
 </style>

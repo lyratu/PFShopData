@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import 'element-ui/lib/theme-chalk/index.css'
-import {Button,Row,Col,Dialog,Upload,Tabs,TabPane,Message,MessageBox,Image,ButtonGroup,Input,Switch} from 'element-ui'
+import {Button,Row,Col,Dialog,Upload,Tabs,TabPane,Message,MessageBox,Image,ButtonGroup,Input,Switch,DropdownItem,DropdownMenu,Dropdown} from 'element-ui'
 
 Vue.use(Button)
 Vue.use(Row)
@@ -13,6 +13,9 @@ Vue.use(Image)
 Vue.use(ButtonGroup)
 Vue.use(Input)
 Vue.use(Switch)
+Vue.use(Dropdown)
+Vue.use(DropdownItem)
+Vue.use(DropdownMenu)
 Vue.prototype.$message = Message
 Vue.prototype.$confirm = MessageBox.confirm
 Vue.prototype.$alert = MessageBox.alert
