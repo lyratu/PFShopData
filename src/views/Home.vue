@@ -112,7 +112,7 @@
             <el-upload
               drag
               :limit="1"
-              action="http://wblog.icu:3000/posts"
+              action="http://log.meetmtf.top:3000/posts"
               ref="upload"
               accept=".json"
               :file-list="fileList"
